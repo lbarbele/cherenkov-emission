@@ -6,35 +6,26 @@
 #include <CorsikaFile.h>
 
 CorsikaAtmosphere::CorsikaAtmosphere(CorsikaFile & cfile)
-: a(0)
-, b(0)
-, c(0)
-, h(0)
+: a(0), b(0), c(0), h(0), d(0)
 {
-  for (int i=0; i<5; i++)
-  {
-    this->h.push_back(cfile.GetHeader(249+i));
-    this->a.push_back(cfile.GetHeader(254+i));
-    this->b.push_back(cfile.GetHeader(259+i));
-    this->c.push_back(cfile.GetHeader(264+i));
-  }
-
-  for (int i=0; i<5; i++) this->d.push_back(this->Depth(this->h[i]));
-
+  if (cfile.Good()) this->Initialize(cfile);
   return;
 }
 
 
 
 CorsikaAtmosphere::CorsikaAtmosphere(std::string s)
-: a(0)
-, b(0)
-, c(0)
-, h(0)
-, d(0)
+: a(0), b(0), c(0), h(0), d(0)
 {
   CorsikaFile cfile(s);
+  if (cfile.Good()) this->Initialize(cfile);
+  return;
+}
 
+
+
+void CorsikaAtmosphere::Initialize(CorsikaFile &cfile)
+{
   for (int i=0; i<5; i++)
   {
     this->h.push_back(cfile.GetHeader(249+i));

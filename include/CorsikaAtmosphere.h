@@ -13,6 +13,8 @@ private:
 
   std::vector<double> a, b, c, h, d;
 
+  void Initialize(CorsikaFile &);
+
 public:
 
   CorsikaAtmosphere(CorsikaFile &);
