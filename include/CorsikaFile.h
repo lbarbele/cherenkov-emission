@@ -46,6 +46,8 @@ public:
   CorsikaShower NextShower();
 
   int NShow(){return this->vHeader[92];}
+  int StartDate(){return this->vHeader[2];}
+  int Version(){return this->vHeader[3];}
 
   bool Good(){return this->kGood;}
   bool Done(){return this->kDone;}

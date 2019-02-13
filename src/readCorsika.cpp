@@ -117,6 +117,31 @@ int main(int argc, char ** argv)
   // The shower counter
   int nShowers = 0;
 
+  // The cherenkov bunch counter
+  double nBunches = 0.;
+
+
+
+  //
+  // Initial message
+  //
+  std::cout << std::endl;
+  std::cout << "\e[1mreadCorsika\e[0m: starting analysis of run " << sRunNumber << "." << std::endl;
+  std::cout << std::endl;
+  std::cout << "+ Cherenkov file " << sInpFil << ": " << (cfile.Good() ? "Ok" : "Fail") << std::endl;
+  std::cout << "+ Longitudinal file " << sInpLng << ": " << (clong.Good() ? "Ok" : "Fail") << std::endl;
+  std::cout << "+ Number of showers: " << cfile.NShow() << std::endl;
+  std::cout << "+ Date of run start: " << cfile.StartDate()%100 << "/" << cfile.StartDate()%10000/100 << "/" << cfile.StartDate()/10000 << " (dd/mm/yy)" << std::endl;
+  std::cout << "+ CORSIKA version:   " << cfile.Version() << std::endl;
+  std::cout << std::endl;
+  std::cout << "Starting loop over showers...";
+  std::cout << std::setw(10) << "Energy";
+  std::cout << std::setw(10) << "Theta";
+  std::cout << std::setw(10) << "Phi";
+  std::cout << std::setw(10) << "Xmax";
+  std::cout << std::setw(10) << "ID";
+  std::cout << std::endl;
+
 
 
   //
@@ -132,6 +157,7 @@ int main(int argc, char ** argv)
 
     // increment shower counter
     nShowers++;
+
 
     //
     // Get overview of the shower and add to the header tree
@@ -155,6 +181,24 @@ int main(int argc, char ** argv)
     vHeader.insert(vHeader.end(),vFit.begin(),vFit.end());
 
     theader.Fill(vHeader.data());
+
+
+
+    //
+    // Initial shower message
+    //
+    std::cout << "+ Reading shower ";
+    std::cout << std::setw(std::floor(std::log10(cfile.NShow()))+1) << nShowers;
+    std::cout << "/";
+    std::cout << std::setw(std::floor(std::log10(cfile.NShow()))+1) << cfile.NShow();
+    std::cout << ":";
+    std::cout << std::setw(10) << shower.Energy() << " GeV";
+    std::cout << std::setw(10) << shower.Theta();
+    std::cout << std::setw(10) << shower.Phi();
+    std::cout << std::setw(10) << xmax;
+    std::cout << std::setw(10) << shower.ID();
+    std::cout << " ... ";
+    std::cout << std::flush;
 
 
 
@@ -312,6 +356,15 @@ int main(int argc, char ** argv)
     hDensityAverage.Add(&hPhotonDensity);
     hDensitySigma.Add(&hPhotonDensitySquare);
 
+
+
+    //
+    // Final shower message
+    //
+    std::cout << "Done!" << std::endl;
+
+
+
     if (maxShowers > 0 && nShowers >= maxShowers) break;
   }
 
@@ -370,6 +423,16 @@ int main(int argc, char ** argv)
   theader.Write(theader.GetName(),TFile::kOverwrite);
 
   froot.Close();
+
+
+
+  //
+  // Final message
+  //
+  std::cout << std::endl;
+  std::cout << "Done with run " << sRunNumber << "!" << std::endl;
+  std::cout << "Root data was saved to " << sOutFil << " ." << std::endl;
+  std::cout << std::endl;
 
   return 0;
 }
