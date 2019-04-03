@@ -24,6 +24,8 @@ public:
 
   double Depth(double);
   double Height(double);
+  double Density_vs_height(double);
+  double Density_vs_depth(double);
 
 
 };

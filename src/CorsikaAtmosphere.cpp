@@ -77,3 +77,22 @@ double CorsikaAtmosphere::Height(double depth)
   else if (this->d[4] >= depth) return this->c[4]*(this->a[4]-depth)/this->b[4];
   else return -1.;
 }
+
+
+
+double CorsikaAtmosphere::Density_vs_height(double height)
+{
+  if      (this->h[0] <= height && height < this->h[1]) return this->b[0]*std::exp(-height/this->c[0])/this->c[0];
+  else if (this->h[1] <= height && height < this->h[2]) return this->b[1]*std::exp(-height/this->c[1])/this->c[1];
+  else if (this->h[2] <= height && height < this->h[3]) return this->b[2]*std::exp(-height/this->c[2])/this->c[2];
+  else if (this->h[3] <= height && height < this->h[4]) return this->b[3]*std::exp(-height/this->c[3])/this->c[3];
+  else if (this->h[4] <= height) return this->b[4]/this->c[4];
+  else return -1.;
+}
+
+
+
+double CorsikaAtmosphere::Density_vs_depth(double depth)
+{
+  return this->Density_vs_height(this->Height(depth));
+}
